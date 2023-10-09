@@ -1,36 +1,25 @@
 import { useState } from 'react';
 import people from './data';
 import { FaChevronLeft, FaChevronRight, FaQuoteRight } from 'react-icons/fa';
+
 const App = () => {
   const [index, setIndex] = useState(0);
   const { name, job, image, description } = people[index];
-  const checkNumber = (number: number) => {
-    if (number > people.length - 1) {
-      return 0;
-    }
-    if (number < 0) {
-      return people.length - 1;
-    }
-    return number;
-  };
+
   const nextPerson = () => {
-    setIndex((index) => {
-      const newIndex = index + 1;
-      return checkNumber(newIndex);
-    });
+    setIndex((index + 1) % people.length);
   };
+
   const prevPerson = () => {
-    setIndex((index) => {
-      const newIndex = index - 1;
-      return checkNumber(newIndex);
-    });
+    setIndex((index - 1 + people.length) % people.length);
   };
+
   const randomPerson = () => {
-    let randomNumber = Math.floor(Math.random() * people.length);
-    if (randomNumber === index) {
-      randomNumber = index + 1;
-    }
-    setIndex(checkNumber(randomNumber));
+    let newIndex;
+    do {
+      newIndex = Math.floor(Math.random() * people.length);
+    } while (newIndex === index);
+    setIndex(newIndex);
   };
 
   return (
@@ -54,7 +43,7 @@ const App = () => {
           </button>
         </div>
         <button className='btn btn-hipster' onClick={randomPerson}>
-          Surprise me
+          Surprise Me
         </button>
       </article>
     </main>
